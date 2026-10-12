@@ -396,7 +396,8 @@ footer links to it.
 
 ```
 patches/pokefirered-dailyred.patch   all changes to pret/pokefirered
-scripts/setup-macos.sh               toolchain (xPack arm-none-eabi-gcc 14.2.1 + libpng)
+scripts/setup-macos.sh               macOS toolchain (xPack arm-none-eabi-gcc 14.2.1 + libpng)
+scripts/setup-linux.sh               Linux/WSL2 toolchain; scripts/windows.ps1 is the Windows launcher
 scripts/get-pokefirered.sh           pinned upstream checkout + patch
 scripts/save-patch.sh                pokefirered/ changes → patches/
 scripts/build-rom.sh                 make modern → web/game/dailyred.gba.gz
