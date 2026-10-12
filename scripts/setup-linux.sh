@@ -17,11 +17,11 @@ case "$(uname -m)" in
   *) echo "Unsupported CPU: $(uname -m)"; exit 1 ;;
 esac
 
-for cmd in curl tar sha256sum make gcc ar git python3 gzip unzip; do
+for cmd in curl tar sha256sum make gcc ar git python3 gzip; do
   if ! command -v "$cmd" >/dev/null 2>&1; then
     echo "Missing required command: $cmd"
     echo "On Debian or Ubuntu, install the build tools with:"
-    echo "  sudo apt update && sudo apt install build-essential curl git python3 gzip unzip zlib1g-dev"
+    echo "  sudo apt update && sudo apt install build-essential curl git python3 gzip zlib1g-dev"
     exit 1
   fi
 done
