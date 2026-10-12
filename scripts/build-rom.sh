@@ -9,9 +9,17 @@ set -euo pipefail
 ROOT="$(cd "$(dirname "$0")/.." && pwd)"
 TC="$ROOT/.toolchain"
 GAME="$ROOT/pokefirered"
+TOOLCHAIN="$TC/arm-none-eabi"
 
 if [ ! -x "$TC/arm-none-eabi/bin/arm-none-eabi-gcc" ]; then
   echo "Toolchain missing. Run scripts/setup-macos.sh first."; exit 1
+fi
+
+# Makefile tool commands expand TOOLCHAIN without quoting it, so give WSL a
+# no-space alias when this checkout lives under a Windows path with spaces.
+if [ "$(uname -s)" = Linux ]; then
+  ln -sfn "$TOOLCHAIN" /tmp/dailyred-arm-none-eabi
+  TOOLCHAIN="/tmp/dailyred-arm-none-eabi"
 fi
 
 # gbagfx asks pkg-config for libpng; clang also honours these variables,
@@ -19,16 +27,16 @@ fi
 export CPATH="$TC/libpng/include${CPATH:+:$CPATH}"
 export LIBRARY_PATH="$TC/libpng/lib${LIBRARY_PATH:+:$LIBRARY_PATH}"
 # A no-op pkg-config so the tool Makefiles don't print "command not found".
-export PATH="$ROOT/scripts/shims:$PATH"
+export PATH="$TOOLCHAIN/bin:$ROOT/scripts/shims:$PATH"
 
 JOBS="$(sysctl -n hw.ncpu 2>/dev/null || nproc)"
 
 if [ "$#" -gt 0 ]; then
-  make -C "$GAME" -j"$JOBS" TOOLCHAIN="$TC/arm-none-eabi" MODERN=1 "$@"
+  make -C "$GAME" -j"$JOBS" TOOLCHAIN="$TOOLCHAIN" MODERN=1 "$@"
   exit 0
 fi
 
-make -C "$GAME" -j"$JOBS" TOOLCHAIN="$TC/arm-none-eabi" MODERN=1
+make -C "$GAME" -j"$JOBS" TOOLCHAIN="$TOOLCHAIN" MODERN=1
 
 ROM="$GAME/pokefirered_modern.gba"
 # The website downloads a gzipped copy (16 MB -> ~5.5 MB, mostly 0xFF padding)

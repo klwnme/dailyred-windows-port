@@ -15,3 +15,7 @@
 /tests/node_modules/
 /tests/output/
 .DS_Store
+
+# Electron desktop packaging
+/node_modules/
+/dist/

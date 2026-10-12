@@ -1523,3 +1523,45 @@ index 75f0e67..7ddf419 100644
              DestroyTask(FindTaskIdByFunc(Task_TitleScreenMain));
          }
          break;
+diff --git a/tools/gbagfx/Makefile b/tools/gbagfx/Makefile
+index cfdbbeb..fbeeb5b 100644
+--- a/tools/gbagfx/Makefile
++++ b/tools/gbagfx/Makefile
+@@ -3,7 +3,7 @@ CC ?= gcc
+ CFLAGS = -Wall -Wextra -Werror -Wno-sign-compare -std=c11 -O3 -flto -DPNG_SKIP_SETJMP_CHECK
+ CFLAGS += $(shell pkg-config --cflags libpng)
+ 
+-LIBS = -lpng -lz
++LIBS = -lpng -lz -lm
+ LDFLAGS += $(shell pkg-config --libs-only-L libpng)
+ 
+ SRCS = main.c convert_png.c gfx.c jasc_pal.c lz.c rl.c util.c font.c huff.c
+diff --git a/tools/rsfont/Makefile b/tools/rsfont/Makefile
+index 92e44b5..d56efcf 100644
+--- a/tools/rsfont/Makefile
++++ b/tools/rsfont/Makefile
+@@ -3,7 +3,7 @@ CC ?= gcc
+ CFLAGS = -Wall -Wextra -Werror -std=c11 -O2 -DPNG_SKIP_SETJMP_CHECK
+ CFLAGS += $(shell pkg-config --cflags libpng)
+ 
+-LIBS = -lpng -lz
++LIBS = -lpng -lz -lm
+ LDFLAGS += $(shell pkg-config --libs-only-L libpng)
+ 
+ SRCS = main.c convert_png.c util.c font.c
+diff --git a/Makefile b/Makefile
+index 8b454db..df8324b 100644
+--- a/Makefile
++++ b/Makefile
+@@ -87,9 +87,9 @@ else
+   # Note: The makefile must be set up to not call these if modern == 0
+   MODERNCC := $(PREFIX)gcc
+   PATH_MODERNCC := PATH="$(PATH)" $(MODERNCC)
+-  CC1 := $(shell $(PATH_MODERNCC) --print-prog-name=cc1) -quiet
++  CC1 := "$(shell $(PATH_MODERNCC) --print-prog-name=cc1)" -quiet
+   override CFLAGS += -mthumb -mthumb-interwork -O$(O_LEVEL) -mabi=apcs-gnu -mtune=arm7tdmi -march=armv4t -fno-toplevel-reorder -Wno-pointer-to-int-cast
+-  LIBPATH := -L $(shell dirname $(shell $(PATH_MODERNCC) -print-file-name=libgcc.a)) -L $(shell dirname $(shell $(PATH_MODERNCC) -print-file-name=libc.a))
++  LIBPATH := -L "$(shell dirname "$(shell $(PATH_MODERNCC) -print-file-name=libgcc.a)")" -L "$(shell dirname "$(shell $(PATH_MODERNCC) -print-file-name=libc.a)")"
+   LIB := $(LIBPATH) -lc -lgcc
+   ifneq ($(DEVKITARM),)
+     ifeq ($(TOOLCHAIN),$(DEVKITARM))

@@ -61,6 +61,26 @@ Node.js and does not need Node installed in WSL. To use another port, run
 `.\scripts\windows.ps1 serve 3000`. You can also run the existing `.sh`
 scripts directly from a WSL terminal opened at the repository folder.
 
+### Build the portable Windows app
+
+After installing Node.js 24 LTS on Windows and completing WSL setup, run these
+commands from the repository folder in PowerShell:
+
+```powershell
+.\scripts\windows.ps1 setup
+.\scripts\windows.ps1 game
+.\scripts\windows.ps1 vendor
+.\scripts\windows.ps1 build
+npm ci
+npm run package:portable
+```
+
+The single-file app is written to
+`dist/portable/Daily-Red-1.0.0-portable-x64.exe`. It bundles the browser,
+emulator and locally built game. Daily Red's source remains in this repository;
+the separately fetched FireRed source and generated ROM are not committed.
+Portable builds keep player stats in a `Daily Red Data` folder beside the EXE.
+
 ## How it works
 
 ```
@@ -398,6 +418,8 @@ footer links to it.
 patches/pokefirered-dailyred.patch   all changes to pret/pokefirered
 scripts/setup-macos.sh               macOS toolchain (xPack arm-none-eabi-gcc 14.2.1 + libpng)
 scripts/setup-linux.sh               Linux/WSL2 toolchain; scripts/windows.ps1 is the Windows launcher
+desktop/main.cjs                     Electron desktop window and local asset server
+package.json                         portable Windows packaging configuration
 scripts/get-pokefirered.sh           pinned upstream checkout + patch
 scripts/save-patch.sh                pokefirered/ changes → patches/
 scripts/build-rom.sh                 make modern → web/game/dailyred.gba.gz
