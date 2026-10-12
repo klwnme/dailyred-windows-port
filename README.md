@@ -13,6 +13,7 @@ through the mGBA emulator compiled to WebAssembly. Nothing about battles is
 reimplemented in JavaScript.
 
 - [Quick start (macOS)](#quick-start-macos)
+- [Quick start (Windows)](#quick-start-windows)
 - [How it works](#how-it-works)
 - [Team generation](#team-generation)
 - [RED's team](#reds-team)
@@ -37,6 +38,28 @@ node scripts/serve.mjs      # open http://localhost:8080
 ```
 
 `setup-macos.sh` picks the right compiler for Intel or Apple Silicon Macs.
+
+## Quick start (Windows)
+
+The ROM build uses the Linux toolchain, so Windows runs it in WSL2. Install
+WSL2 with an Ubuntu or Debian distribution, plus Node.js 18 or newer for
+serving the site. Then open PowerShell in this repository folder. The project
+files can stay on your Windows drive.
+
+```powershell
+.\scripts\windows.ps1 setup      # one-time; WSL needs build-essential, curl, git, python3, zlib1g-dev
+.\scripts\windows.ps1 game       # fetch pret/pokefirered and apply Daily Red's patch
+.\scripts\windows.ps1 vendor     # fetch the browser emulator and font
+.\scripts\windows.ps1 build      # build web/game/dailyred.gba.gz
+.\scripts\windows.ps1 serve      # open http://localhost:8080
+```
+
+If the setup command reports missing build tools, install them in the WSL
+terminal with `sudo apt update && sudo apt install build-essential curl git
+python3 zlib1g-dev`, then rerun setup. The `serve` command runs with Windows
+Node.js and does not need Node installed in WSL. To use another port, run
+`.\scripts\windows.ps1 serve 3000`. You can also run the existing `.sh`
+scripts directly from a WSL terminal opened at the repository folder.
 
 ## How it works
 
